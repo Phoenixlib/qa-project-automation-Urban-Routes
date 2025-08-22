@@ -1,121 +1,84 @@
-# Pruebas Urban Routes
+# QA Project: Urban Routes App Testing
 
-## Descripción del Proyecto
+Este proyecto de control de calidad utiliza el patrón de diseño **Page Object Model (POM)** y la biblioteca **Selenium WebDriver** para automatizar las pruebas de las funcionalidades de la aplicación de taxis **Urban Routes**. El objetivo es asegurar que las características principales de la aplicación web funcionen correctamente, incluyendo la solicitud de rutas, selección de tarifas, métodos de pago, y la interacción con el conductor.
 
-Urban Routes es una aplicación web para solicitar servicios de taxi. Este proyecto contiene un conjunto de pruebas automatizadas que validan el flujo completo de solicitud de taxi, desde la configuración de la ruta hasta la confirmación del pedido.
+---
 
-Las pruebas cubren las siguientes funcionalidades principales:
-- Configuración de direcciones de origen y destino
-- Selección de tarifa Comfort
-- Registro y validación de número de teléfono
-- Adición de método de pago (tarjeta de crédito)
-- Envío de mensajes al conductor
-- Solicitud de servicios adicionales (manta, pañuelos, helado)
-- Confirmación del pedido de taxi
+## 🚀 Tecnologías Utilizadas
 
-## Tecnologías y Técnicas Utilizadas
+* **Python 3:** Lenguaje de programación principal.
+* **Selenium WebDriver:** Biblioteca para la automatización de la interfaz de usuario del navegador.
+* **pytest:** Framework de pruebas para ejecutar los tests.
+* **Google Chrome:** Navegador utilizado para la ejecución de las pruebas.
 
-### Tecnologías
-- **Python**: Lenguaje de programación principal
-- **Selenium WebDriver**: Framework para automatización de navegadores web
-- **Chrome WebDriver**: Driver específico para el navegador Google Chrome
-- **pytest**: Framework de testing implícito (basado en la estructura de las clases de prueba)
+---
 
-### Técnicas de Testing
-- **Page Object Model (POM)**: Patrón de diseño que encapsula los elementos y acciones de cada página en clases separadas
-- **Explicit Waits**: Uso de `WebDriverWait` y `expected_conditions` para sincronización robusta
-- **Localizadores múltiples**: Implementación de diferentes estrategias de localización (ID, CSS Selector, XPath, Class Name)
-- **Gestión de logs del navegador**: Captura de logs de rendimiento para obtener códigos de verificación SMS
-- **Configuración centralizada**: Uso del módulo `data` para centralizar datos de prueba
+## 📂 Estructura del Proyecto
 
-### Características Técnicas
-- **Manejo de ventanas modales**: Interacción con elementos emergentes y modales
-- **Simulación de entrada de usuario**: Envío de teclas especiales (`Keys.TAB`)
-- **Validación de códigos SMS**: Función especializada para extraer códigos de confirmación telefónica
-- **Timeouts configurables**: Esperas de hasta 40 segundos para elementos críticos
-- **Setup y Teardown**: Configuración automática del navegador al inicio y limpieza al final
+El proyecto sigue una estructura clara y organizada bajo el patrón **Page Object Model**.
 
-## Instrucciones para Ejecutar las Pruebas
+* `Data/`: Contiene el archivo `data.py` con las constantes y variables de prueba (URLs, direcciones, números de teléfono, etc.).
+* `Pages/`: Contiene los objetos de página (`UrbanRoutes.py`), que encapsulan los localizadores web y las interacciones con los elementos de la página.
+* `Tests/`: Contiene el archivo `TestUrbanRoutes.py`, donde se encuentran los scripts de prueba. Cada método de prueba valida una funcionalidad específica.
+* `Utils/`: Contiene funciones de utilidad, como `phone_code.py`, que se utiliza para obtener el código de confirmación del teléfono de los registros del navegador.
+* `README.md`: Este archivo, que documenta el proyecto.
 
-### Prerrequisitos
-1. **Python**: Asegúrate de tener Python instalado en tu sistema
-2. **Dependencias**: Instala las librerías necesarias:
-   ```bash
-   pip install selenium
-   ```
-3. **Chrome WebDriver**: El código utiliza el Service() sin parámetros, por lo que necesitas:
-   - Tener Google Chrome instalado
-   - ChromeDriver en tu PATH del sistema, o
-   - ChromeDriver en la misma carpeta que tu script
+---
 
-4. **Archivo de datos**: El proyecto incluye un archivo `data.py` con la configuración necesaria:
-   ```python
-   urban_routes_url = 'https://cnt-5e53e537-8e7f-415b-86d8-1b2cce62a582.containerhub.tripleten-services.com?lng=es'
-   address_from = 'East 2nd Street, 601'
-   address_to = '1300 1st St'
-   phone_number = '+1 123 123 12 12'
-   card_number, card_code = '1234 5678 9100', '111'
-   message_for_driver = 'Muéstrame el museo'
-   ```
-   **Nota**: Este archivo ya está configurado con datos de prueba válidos para el entorno de Urban Routes.
+## 📝 Descripción de las Pruebas
 
-### Ejecutar las Pruebas
+El archivo `TestUrbanRoutes.py` contiene una suite de pruebas que valida el flujo principal de la aplicación. Los tests cubiertos son:
 
-#### Opción 1: Ejecutar con pytest
+1.  **`test_set_route`**: Verifica que las direcciones de origen y destino se establecen correctamente en los campos del formulario.
+2.  **`test_select_comfort`**: Asegura que el usuario puede seleccionar la tarifa "Comfort".
+3.  **`test_fild_phone_number`**: Prueba el proceso de rellenar el número de teléfono y el código de confirmación.
+4.  **`test_add_credit_card`**: Valida la funcionalidad de agregar una nueva tarjeta de crédito como método de pago.
+5.  **`test_message_driver`**: Confirma que el mensaje para el conductor se agrega exitosamente.
+6.  **`test_ask_for_blanket`**: Verifica que la opción de "Manta y pañuelos" se puede seleccionar.
+7.  **`test_ask_ice_cream`**: Prueba la funcionalidad del contador de "Helado", asegurando que no se pueda exceder el límite.
+8.  **`test_order_taxi`**: Valida que se puede iniciar la solicitud de un taxi.
+9.  **`test_wait_driver_found`**: Asegura que el sistema espera y detecta la asignación de un conductor.
+
+---
+
+## 🛠️ Instalación y Ejecución
+
+Para ejecutar estas pruebas, sigue los siguientes pasos:
+
+### 1. Requisitos
+* Tener Python 3 instalado.
+* Tener **Google Chrome** instalado en tu sistema.
+
+### 2. Instalación de Dependencias
+Abre la terminal en la raíz del proyecto e instala las bibliotecas necesarias:
+
 ```bash
-pytest main.py -v
-```
+pip install -r requirements.txt
+````
 
-#### Opción 2: Ejecutar como script de Python
+*(Nota: Si no tienes un archivo `requirements.txt`, puedes crearlo con `pip freeze > requirements.txt` después de instalar `selenium` y `pytest`).*
+
+### 3\. Ejecución de las Pruebas
+
+Para correr toda la suite de pruebas, utiliza el siguiente comando en la terminal:
+
 ```bash
-python main.py
+pytest
 ```
 
-#### Opción 3: Ejecutar pruebas individuales
-Para ejecutar una prueba específica con pytest:
-```bash
-pytest main.py::TestUrbanRoutes::test_set_route -v
+  * `pytest` detectará automáticamente el archivo `TestUrbanRoutes.py` y ejecutará todos los métodos que comiencen con `test_`.
+
+-----
+
+## ⚙️ Configuración Adicional
+
+  * **`data.py`**: Este archivo es el corazón de la configuración de datos. Puedes modificar las variables como `urban_routes_url`, `address_from`, `phone_number`, etc., para adaptar las pruebas a diferentes escenarios sin necesidad de cambiar los archivos de prueba.
+
+-----
+
+## 🙋‍♂️ Contacto
+
+Para cualquier pregunta o sugerencia, no dudes en contactar al desarrollador del proyecto.
+
 ```
-
-### Orden de Ejecución
-Las pruebas están diseñadas para ejecutarse en secuencia, ya que cada prueba depende del estado generado por la anterior:
-
-1. `test_set_route`: Configura las direcciones
-2. `test_select_comfort`: Selecciona la tarifa
-3. `test_fild_phone_number`: Valida el número de teléfono
-4. `test_add_credit_card`: Agrega método de pago
-5. `test_message_driver`: Envía mensaje al conductor
-6. `test_ask_for_blanket`: Solicita manta y pañuelos
-7. `test_ask_ice_cream`: Solicita helado
-8. `test_order_taxi`: Confirma el pedido
-
-### Notas Importantes
-- Las pruebas requieren acceso a la aplicación Urban Routes en funcionamiento
-- El navegador Chrome se abrirá automáticamente durante la ejecución
-- Los códigos de verificación SMS se obtienen automáticamente de los logs del navegador
-- Las pruebas pueden tardar varios minutos en completarse debido a las esperas y la carga de la aplicación
-
-## Estructura del Proyecto
 ```
-proyecto/
-│
-├── main.py                  # Archivo principal con las pruebas
-├── data.py                  # Archivo de configuración con datos de prueba
-└── README.md               # Este archivo
-```
-
-## Datos de Prueba Configurados
-
-El archivo `data.py` incluye los siguientes datos de prueba:
-
-- **URL de la aplicación**: Entorno de pruebas de Urban Routes con interfaz en español
-- **Direcciones**: 
-  - Origen: "East 2nd Street, 601"
-  - Destino: "1300 1st St"
-- **Número de teléfono**: "+1 123 123 12 12" (formato estadounidense)
-- **Tarjeta de crédito**: 
-  - Número: "1234 5678 9100"
-  - Código CVV: "111"
-- **Mensaje para el conductor**: "Muéstrame el museo"
-
-Estos datos están preconfigurados para funcionar con el entorno de pruebas de Urban Routes y no requieren modificación para ejecutar las pruebas.
